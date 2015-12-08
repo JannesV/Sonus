@@ -187,8 +187,10 @@
     "no-dupe-class-members": 2,
     "prefer-template": 2,
     "no-magic-numbers": 0,
-    "no-empty-pattern": 2,
-    "no-negated-condition": 2
+    "no-empty-pattern": 2
+  },
+  "globals": {
+    "Sketch": true
   }
 
 }
