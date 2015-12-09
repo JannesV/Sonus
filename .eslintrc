@@ -190,7 +190,11 @@
     "no-empty-pattern": 2
   },
   "globals": {
-    "Sketch": true
+    "Sketch": true,
+    "floor": true,
+    "random": true,
+    "exp": true,
+    "TWO_PI": true,
   }
 
 }

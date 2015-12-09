@@ -32,7 +32,6 @@ class Particle {
   }
 
   move() {
-    //this.rotation += this.spin;
     this.x += this.xDir * this.speed * this.level;
     this.y += this.yDir * this.speed * this.level;
   }
@@ -48,18 +47,6 @@ class Particle {
     this.smoothedAlpha += (this.decayAlpha - this.smoothedAlpha) * 0.3;
     this.decayScale *= 0.985;
     this.decayAlpha *= 0.975;
-    // ctx.save();
-    // ctx.beginPath();
-    // ctx.translate(this.x + Math.cos(this.rotation * this.speed) * 250, this.y);
-    // ctx.rotate(this.rotation);
-    // ctx.scale(this.smoothedScale * this.level, this.smoothedScale * this.level);
-    // ctx.moveTo(this.size * 0.5, 0);
-    // ctx.lineTo(this.size * -0.5, 0);
-    // ctx.lineWidth = 0.5;
-    // ctx.lineCap = 'round';
-    // ctx.globalAlpha = this.smoothedAlpha / this.level;
-    // ctx.strokeStyle = this.color;
-    // ctx.stroke();
     ctx.save();
     ctx.beginPath();
     ctx.arc( this.x, this.y, this.smoothedScale * this.level, 0, TWO_PI );

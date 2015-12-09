@@ -27,19 +27,17 @@ class AudioAnalyser {
     console.log(this);
 
     this.audio.addEventListener('canplay', () => {
-        this.source = this.context.createMediaElementSource(this.audio);
-        this.source.connect(this.analyser);
-        this.analyser.connect(this.jsNode);
-        this.jsNode.connect(this.context.destination);
-        this.source.connect(this.context.destination);
-        return this.jsNode.onaudioprocess = () => {
-          this.analyser.getByteFrequencyData(this.bands);
-
-          if (!this.audio.paused) {
-            return typeof this.onUpdate === 'function' ? this.onUpdate(this.bands) : void 0;
-          }
-        };
-
+      this.source = this.context.createMediaElementSource(this.audio);
+      this.source.connect(this.analyser);
+      this.analyser.connect(this.jsNode);
+      this.jsNode.connect(this.context.destination);
+      this.source.connect(this.context.destination);
+      return this.jsNode.onaudioprocess = () => {
+        this.analyser.getByteFrequencyData(this.bands);
+        if (!this.audio.paused) {
+          return typeof this.onUpdate === 'function' ? this.onUpdate(this.bands) : void 0;
+        }
+      };
     });
 
   }
