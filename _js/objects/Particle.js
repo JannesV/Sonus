@@ -2,11 +2,11 @@
 
 class Particle {
   constructor(x1, y1, settings, color) {
-    this.SCALE = settings.SCALE;
-    this.ALPHA = settings.ALPHA;
-    this.SPEED = settings.SPEED;
-    this.COLOR = color;
-    this.SIZE = settings.SIZE;
+    this.scale = settings.scale;
+    this.alpha = settings.alpha;
+    this.speed = settings.speed;
+    this.color = color;
+    this.size = settings.size;
     this.x = x1 !== null ? x1 : 0;
     this.y = y1 !== null ? y1 : 0;
     this.reset();
@@ -14,13 +14,13 @@ class Particle {
 
   reset() {
     this.level = 1 + floor(random(4));
-    this.scale = random(this.SCALE.MIN, this.SCALE.MAX);
-    this.alpha = random(this.ALPHA.MIN, this.ALPHA.MAX);
-    this.speed = random(this.SPEED.MIN, this.SPEED.MAX);
-    this.color = this.COLOR;
+    this.scale = random(this.scale.min, this.scale.max);
+    this.alpha = random(this.alpha.min, this.alpha.max);
+    this.speed = random(this.speed.min, this.speed.max);
+    this.color = this.color;
     this.xDir = Math.round(Math.random()) * 2 - 1;
     this.yDir = Math.round(Math.random()) * 2 - 1;
-    this.size = random(this.SIZE.MIN, this.SIZE.MAX);
+    this.size = random(this.size.min, this.size.max);
     this.smoothedScale = 0;
     this.smoothedAlpha = 0;
     this.decayScale = 0;
