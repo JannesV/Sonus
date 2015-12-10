@@ -42,18 +42,6 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'eslint'
       },
-
-      {
-        test: /\.(hbs|handlebars)$/,
-        exclude: /node_modules/,
-        loader: 'handlebars',
-        query: {
-          helperDirs: [
-            `${__dirname}/_helpers`
-          ]
-        }
-      },
-
       {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract('css!postcss!sass?outputStyle=expanded')

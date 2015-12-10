@@ -27,7 +27,9 @@ class AudioAnalyser {
     console.log(this);
 
     this.audio.addEventListener('canplay', () => {
-      this.source = this.context.createMediaElementSource(this.audio);
+      if (!this.source) {
+        this.source = this.context.createMediaElementSource(this.audio);
+      }
       this.source.connect(this.analyser);
       this.analyser.connect(this.jsNode);
       this.jsNode.connect(this.context.destination);
@@ -38,6 +40,7 @@ class AudioAnalyser {
           return typeof this.onUpdate === 'function' ? this.onUpdate(this.bands) : void 0;
         }
       };
+
     });
 
   }
