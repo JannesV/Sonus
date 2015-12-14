@@ -6,7 +6,7 @@ import Sonus from './Sonus';
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-
+let context = new AudioContext();
 // let tuna = new Tuna(context);
 
 // var chorus = new tuna.Delay({
