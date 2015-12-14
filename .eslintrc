@@ -191,6 +191,7 @@
   },
   "globals": {
     "Sketch": true,
+    "Tuna": true,
     "floor": true,
     "random": true,
     "exp": true,

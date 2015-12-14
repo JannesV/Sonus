@@ -1,10 +1,11 @@
 'use strict';
 
-class Particle {
-  constructor(x1, y1, settings, color) {
-    this.scaleSetting = settings.scale;
-    this.alphaSetting = settings.alpha;
-    this.speedSetting = settings.speed;
+class SoundParticle {
+  constructor(x1, y1, color) {
+    this.settings = {scale: this.scale, speed: this.speed, alpha: this.alpha};
+    this.scaleSetting = {min: 5, max: 8};
+    this.alphaSetting = {min: 0.5, max: 0.9};
+
     this.color = color;
     this.x = x1 !== null ? x1 : 0;
     this.y = y1 !== null ? y1 : 0;
@@ -14,10 +15,7 @@ class Particle {
 
   reset() {
     this.scale = random(this.scaleSetting.min, this.scaleSetting.max);
-    this.alpha = random(this.alphaSetting.min, this.alphaSetting.max);
-    this.speed = random(this.speedSetting.min, this.speedSetting.max);
-    this.xDir = Math.round(Math.random()) * 2 - 1;
-    this.yDir = Math.round(Math.random()) * 2 - 1;
+    this.alpha = 0;
     this.smoothedScale = 0;
     this.smoothedAlpha = 0;
     this.decayScale = 0;
@@ -25,10 +23,10 @@ class Particle {
     this.energy = 0;
   }
 
-  move() {
-    this.x += this.xDir * this.speed;
-    this.y += this.yDir * this.speed;
+  makeVisible() {
+    this.alpha = random(this.alphaSetting.min, this.alphaSetting.max);
   }
+
 
   draw(ctx) {
     var alpha, power, scale;
@@ -52,16 +50,16 @@ class Particle {
   }
 }
 
-export const ParticleGenerator = (sketch, numParticles, settings, color) => {
+export const SoundParticleGenerator = (sketch, width, yPos, numParticles, color) => {
   let particles = [];
   for (var i = 0, ref = numParticles - 1; i <= ref; i+= 1) {
-    let x = random(sketch.width);
-    let y = random(sketch.height * 2);
-    let particle = new Particle(x, y, settings, color);
+    let x = i * width/numParticles;
+    let y = yPos;
+    let particle = new SoundParticle(x, y, color);
     particles.push(particle);
   }
 
   return particles;
 };
 
-export default Particle;
+export default SoundParticle;
