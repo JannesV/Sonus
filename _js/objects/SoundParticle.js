@@ -1,10 +1,11 @@
 'use strict';
 
 class SoundParticle {
-  constructor(x1, y1, color) {
+  constructor(x1, y1, color, soundId) {
     this.settings = {scale: this.scale, speed: this.speed, alpha: this.alpha};
     this.scaleSetting = {min: 5, max: 8};
     this.alphaSetting = {min: 0.5, max: 0.9};
+    this.soundId = soundId;
 
     this.color = color;
     this.x = x1 !== null ? x1 : 0;
@@ -50,12 +51,12 @@ class SoundParticle {
   }
 }
 
-export const SoundParticleGenerator = (sketch, width, yPos, numParticles, color) => {
+export const SoundParticleGenerator = (sketch, width, yPos, numParticles, color, soundId) => {
   let particles = [];
   for (var i = 0, ref = numParticles - 1; i <= ref; i+= 1) {
     let x = i * width/numParticles;
     let y = yPos;
-    let particle = new SoundParticle(x, y, color);
+    let particle = new SoundParticle(x, y, color, soundId);
     particles.push(particle);
   }
 

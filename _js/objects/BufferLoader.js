@@ -5,7 +5,12 @@ class BufferLoader {
     this.context = context;
     this.urlList = [];
     for (var i = 1; i <= 16; i++) {
-      this.urlList.push(`./assets/${url}_${i}.ogg`);
+      if (url === 'kick' || url === 'clap' || url === 'hat') {
+        this.urlList.push(`./assets/${url}_${i}.wav`);
+      } else {
+        this.urlList.push(`./assets/${url}_${i}.ogg`);
+      }
+
     }
     this.onload = callback;
     this.bufferList = [];

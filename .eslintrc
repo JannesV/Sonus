@@ -195,6 +195,7 @@
     "floor": true,
     "random": true,
     "exp": true,
+    "map": true,
     "Wad": true,
     "TWO_PI": true,
   }

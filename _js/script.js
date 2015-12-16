@@ -18,7 +18,7 @@ let context = new AudioContext();
 //   bypass: 0
 // });
 
-let sounds = ['syntklocka_stab', 'bee_long', 'bziaou', 'drums', 'voice', 'woody', '8bit_stab', 'bassdist'];
+let sounds = ['syntklocka_stab', 'kick', 'clap', 'drums', 'hat', 'woody', '8bit_stab', 'bassdist'];
 
 let bufferList = {};
 

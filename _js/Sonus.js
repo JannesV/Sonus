@@ -1,8 +1,9 @@
 'use strict';
 
-
 import {ParticleGenerator} from './objects/Particle';
-import SoundParticle, {SoundParticleGenerator} from './objects/SoundParticle';
+import {SoundParticleGenerator} from './objects/SoundParticle';
+
+
 
 class Sonus {
   constructor(sounds, bufferList) {
@@ -17,17 +18,46 @@ class Sonus {
     this.settings = {scale: this.scale, speed: this.speed, alpha: this.alpha};
     this.tick = 0;
     this.drawing = false;
+    this.activeSound = 0;
+    this.tuna = new Tuna(this.context);
 
     this.setupSketch();
-    this.startTicker();
+    document.getElementById('buttons').addEventListener('click', evt => this.buttonListener(evt));
+  }
+
+  buttonListener(evt) {
+
+    if (evt.target.className === 'button') {
+      this.activeSound = parseInt(evt.target.id);
+
+
+      let buttons = document.getElementsByClassName('button');
+      [].forEach.call(buttons, (button) => {
+        button.classList.remove('active');
+      });
+      evt.target.classList.add('active');
+    }
   }
 
   playSound(buffer, time) {
+    let delay = new this.tuna.Delay({
+      feedback: 0.45,    //0 to 1+
+      delayTime: 150,    //how many milliseconds should the wet signal be delayed?
+      wetLevel: 0.25,    //0 to 1+
+      dryLevel: 1,       //0 to 1+
+      cutoff: 2000,      //cutoff frequency of the built in lowpass-filter. 20 to 22050
+      bypass: 0
+    });
+    let gainNode = this.context.createGain();
+    gainNode.gain.value = 0.7;
+
     var source = this.context.createBufferSource();
     source.buffer = buffer;
 
-    //source.connect(chorus);
-    source.connect(this.context.destination);
+
+    source.connect(delay);
+    delay.connect(this.context.destination);
+    gainNode.gain.linearRampToValueAtTime(0, this.context.currentTime + 0.2);
 
     if (!source.start) {
       source.start = source.noteOn;
@@ -35,54 +65,36 @@ class Sonus {
     source.start(time);
   }
 
-  startTicker() {
-    setInterval(() => {
-      this.tick++;
-      if (this.tick == 9) {
-        this.tick = 1;
-      }
-      //this.panel.setState({activeTick: this.tick});
-    }, 200);
-  }
-
-
-
   setupSketch() {
     this.draw = Sketch.create({
       autopause: false,
-      container: document.getElementById('panel'),
+      container: document.getElementById('canvas'),
       draw: () => {
-        // if(this.drawing) {
-        //   if(!this.soundParticles[this.soundParticles.length-1]){
-        //     this.soundParticles.push(new SoundParticle(200, this.draw.mouse.y, this.colors[3]));
-        //   } else if (this.soundParticles[this.soundParticles.length-1].x < 190){
-        //     this.soundParticles.push(new SoundParticle(200, this.draw.mouse.y, this.colors[3]));
-        //   }
-        // }
-
-
         if(this.soundParticles){
+          for (var i = this.soundParticles.length - 1; i >= 0; i--) {
+            this.soundParticles[i].forEach((particle) => {
+              particle.draw(this.draw);
 
-          this.soundParticles.forEach((particle) => {
-            particle.draw(this.draw);
-
-            if(Math.abs(particle.x - this.draw.mouse.x) <= 5 && this.drawing) {
-              particle.y = this.draw.mouse.y;
-              particle.energy = 1;
-              particle.makeVisible();
-            }
-
-            particle.x -= 2;
-            if (particle.x < 0) {
-              if (particle.alpha > 0) {
-                console.log(Math.floor(map(particle.y, 5, 190, 0, 15)));
-                this.playSound(this.bufferList[this.sounds[7]][Math.floor(map(particle.y, 0, 200, 0, 15))],0);
+              if(Math.abs(particle.x - this.draw.mouse.x) <= 3 && this.drawing && this.activeSound === i) {
+                particle.y = this.draw.mouse.y;
                 particle.energy = 1;
+                particle.makeVisible();
               }
 
-              particle.x = 600;
-            };
-          });
+              particle.x -= 2;
+              if (particle.x < 0) {
+                if (particle.alpha > 0) {
+                  let sound = Math.floor(map(particle.y, 0, 200, 0, 15));
+                  this.playSound(this.bufferList[this.sounds[particle.soundId]][sound], 0);
+                  particle.energy = 0.5;
+                }
+                particle.x = 600;
+              }
+            });
+          };
+
+
+
         }
 
       },
@@ -96,7 +108,7 @@ class Sonus {
 
     this.sketch = Sketch.create({
       autopause: false,
-      container: document.getElementById('container'),
+      container: document.getElementById('visual'),
       setup: () => {
 
       },
@@ -105,30 +117,23 @@ class Sonus {
         this.moveParticles(this.particles);
         this.moveParticles(this.bassParticles);
         this.moveParticles(this.tingParticles);
-      },
-      mousedown: () => {
-        console.log('click');
-        // onTick();
-        // ticker = setInterval(onTick, interval);
-        // this.particles.forEach((particle) => {
-        //   particle.energy = 1;
-        // });
-      },
-      mouseup: function() {
-        //clearInterval(ticker);
       }
     });
     this.particles = ParticleGenerator(this.sketch, this.numParticles, this.settings, this.colors[0]);
     this.bassParticles = ParticleGenerator(this.sketch, this.numParticles, this.settings, this.colors[1]);
     this.tingParticles = ParticleGenerator(this.sketch, this.numParticles, this.settings, this.colors[3]);
 
-    this.soundParticles = SoundParticleGenerator(this.draw, 600, 100, 50, this.colors[4]);
+    this.soundParticles = [];
+    for (var i = 0; i < 7; i++) {
+      this.soundParticles.push(SoundParticleGenerator(this.draw, 600, 100, 40, this.colors[i], i));
+    }
+
 
   }
 
   pop(particles) {
     particles.forEach((particle) => {
-      particle.energy = 1;
+      particle.energy = random(0.5, 1);
     });
   }
 
