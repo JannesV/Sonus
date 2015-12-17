@@ -21,7 +21,14 @@
 
   <div id="panelcontainer">
     <div id="draw" class="panel">
-      <h1>Sonus</h1>
+      <h1>Sonus <span>Draw music and share !</span></h1>
+      <div class="buttons">
+        <div id="pencil" class="button active"><img src="img/pencil.svg" alt=""></div>
+        <div id="eraser" class="button"><img src="img/eraser.svg" alt=""></div>
+        <div id="trash" class="button"><img src="img/trash.svg" alt=""></div>
+        <div id="eq" class="button"><img src="img/eq.svg" alt=""></div>
+      </div>
+
       <div id="canvas"></div>
     </div>
 
@@ -34,6 +41,25 @@
       <div id="5" class="button"><img src="img/6.svg" alt=""></div>
       <div id="6" class="button"><img src="img/7.svg" alt=""></div>
 
+    </div>
+
+    <div id="eqpanel" class="panel closed">
+      <div class="slider">
+          <label for="gain">gain</label>
+          <input id="gain" type="range" value="0.75" min="0" max="0.75" step="0.01">
+      </div>
+      <div class="slider">
+          <label for="delay">delay</label>
+          <input id="delay" type="range" value="0.25" min="0" max="1" step="0.01">
+      </div>
+      <div class="slider">
+          <label for="gain">Gain</label>
+          <input id="gain" type="range" value="0.75" min="0" max="1" step="0.01">
+      </div>
+      <div class="slider">
+          <label for="gain">Gain</label>
+          <input id="gain" type="range" value="0.75" min="0" max="1" step="0.01">
+      </div>
     </div>
   </div>
 

@@ -34,7 +34,7 @@ class Particle {
     var alpha, power, scale;
     power = exp(this.energy);
     scale = this.scale * power;
-    alpha = this.alpha * power;
+    alpha = this.alpha * power - 0.5;
     this.decayScale = Math.max(this.decayScale, scale);
     this.decayAlpha = Math.max(this.decayAlpha, alpha);
     this.smoothedScale += (this.decayScale - this.smoothedScale) * 0.3;

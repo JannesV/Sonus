@@ -39,7 +39,7 @@ class SoundParticle {
     this.smoothedScale += (this.decayScale - this.smoothedScale) * 0.3;
     this.smoothedAlpha += (this.decayAlpha - this.smoothedAlpha) * 0.3;
     this.decayScale *= 0.985;
-    this.decayAlpha *= 0.975;
+    this.decayAlpha *= 0.4;
     ctx.save();
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.smoothedScale, 0, TWO_PI );
