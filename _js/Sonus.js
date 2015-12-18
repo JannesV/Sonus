@@ -2,6 +2,7 @@
 
 import {ParticleGenerator} from './objects/Particle';
 import {SoundParticleGenerator} from './objects/SoundParticle';
+//import Recorder from './objects/Recorder';
 
 
 

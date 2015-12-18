@@ -27,6 +27,7 @@
         <div id="eraser" class="button"><img src="img/eraser.svg" alt=""></div>
         <div id="trash" class="button"><img src="img/trash.svg" alt=""></div>
         <div id="eq" class="button"><img src="img/eq.svg" alt=""></div>
+        <div id="info" class="button"><img src="img/info.svg" alt=""></div>
       </div>
 
       <div id="canvas"></div>
@@ -61,12 +62,19 @@
           <input id="gain" type="range" value="0.75" min="0" max="1" step="0.01">
       </div>
     </div>
+
+    <div class="panel">
+      <h1>INFO</h1>
+      <p></p>
+    </div>
   </div>
 
   <div id="visual">
 
   </div>
+  <script src="/socket.io/socket.io.js"></script>
   <script src="/js/sketch.min.js"></script>
+  <script src="/js/tuna.min.js"></script>
   <script src="/js/tuna.min.js"></script>
 
   <script src="/js/script.js"></script>
