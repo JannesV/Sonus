@@ -30,7 +30,7 @@ const loadSounds = () => {
 };
 
 const loadComplete = () => {
-  socket = io.connect('http://localhost:3000');
+  socket = io.connect(window.location.host);
   window.sonus = new Sonus(sounds, bufferList, socket);
   setTimeout(() => {
     document.getElementById('loader').classList.add('slideOutDown', 'animated');
