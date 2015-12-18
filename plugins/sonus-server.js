@@ -5,10 +5,10 @@ module.exports.register = (server, options, next) => {
   let clients = [];
   let Client = require('../models/Client');
   let io = require('socket.io')(server.listener);
+      io.set('transports', ['websocket']);
+    io.set('polling duration', 10);
 
   io.on('connection', socket => {
-    io.set('transports', ['xhr-polling']);
-    io.set('polling duration', 10);
     console.log('CONNECT')
 
     let maxId = 0;
