@@ -2,6 +2,10 @@
 
 import {ParticleGenerator} from './objects/Particle';
 import {SoundParticleGenerator} from './objects/SoundParticle';
+import {
+    html, $
+}
+from './helpers/util';
 //import Recorder from './objects/Recorder';
 
 
@@ -24,6 +28,7 @@ class Sonus {
 
     this.filterSetup();
     this.setupSketch();
+    this.setupSocket();
     document.getElementById('buttons').addEventListener('click', evt => this.buttonListener(evt));
     document.getElementById('eq').addEventListener('click', evt => this.eqListener(evt));
     document.getElementById('pencil').addEventListener('click', evt => this.pencilListener(evt));
@@ -31,6 +36,46 @@ class Sonus {
     document.getElementById('trash').addEventListener('click', evt => this.trashListener(evt));
     document.getElementById('gain').addEventListener('input', evt => this.gainListener(evt));
     document.getElementById('delay').addEventListener('input', evt => this.delayListener(evt));
+  }
+
+  setupSocket() {
+    this.socket = io(window.location.hostname);
+
+    let $users = $('.users');
+
+    this.socket.on('init', clients => {
+      console.log('INIT');
+
+      clients.forEach(client => {
+        console.log(client);
+        let $user = html('<li>derp</li>');
+
+        if (client.socketid === this.socket.id) {
+          this.client.button = false;
+        }
+
+        if (client.socketid === this.socket.id) {
+          $user.querySelector('input').addEventListener('input', e => {
+            this.socket.emit('nickname_change', {
+              nickname: e.currentTarget.value,
+              socketid: this.socket.id
+            });
+          });
+        } else {
+          $user.querySelector('a').addEventListener('click', e => {
+            e.preventDefault();
+            this.socket.emit('yo', {
+              mySocketid: this.socket.id,
+              targetSocketid: e.currentTarget.parentNode.dataset.socketid
+            });
+
+          });
+        }
+        $users.appendChild($user);
+
+      });
+
+    });
   }
 
   filterSetup() {

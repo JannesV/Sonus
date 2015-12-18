@@ -8,6 +8,8 @@ module.exports.register = (server, options, next) => {
 
   io.on('connection', socket => {
 
+    console.log('CONNECT')
+
     let maxId = 0;
 
     if (clients.length > 0) {

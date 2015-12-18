@@ -41,13 +41,8 @@ const loadComplete = () => {
 
 window.onload = () => {
 
-
-
   socket = io(`http://localhost:${process.env.PORT || 3000}`);
 
-  socket.on('init', clients => {
-    console.log(clients);
-  });
   loadSounds();
 };
 

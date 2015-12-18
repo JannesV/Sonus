@@ -190,6 +190,7 @@
     "no-empty-pattern": 2
   },
   "globals": {
+    "io": true,
     "Sketch": true,
     "Tuna": true,
     "floor": true,
