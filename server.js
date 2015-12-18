@@ -26,9 +26,12 @@ const pluginHandler = (err) => {
   if(err) console.error(err);
 };
 
+server.register(require('hapi-io'), pluginHandler);
 server.register(require('inert'), pluginHandler);
 server.register(require('./plugins/'), pluginHandler);
 server.register(require('./routes/'), pluginHandler);
+
+
 
 server.start(err => {
   if(err) console.error(err);

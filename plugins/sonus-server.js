@@ -4,12 +4,12 @@ module.exports.register = (server, options, next) => {
 
   let clients = [];
   let Client = require('../models/Client');
-  let io = require('socket.io')(server.listener);
-      io.set('transports', ['websocket']);
-    io.set('polling duration', 10);
+
+  let io = server.plugins['hapi-io'].io;
+
 
   io.on('connection', socket => {
-    console.log('CONNECT')
+    console.log('CONNECT');
 
     let maxId = 0;
 
