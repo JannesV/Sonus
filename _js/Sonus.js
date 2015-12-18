@@ -41,6 +41,7 @@ class Sonus {
   setupSocket() {
     this.socket = io(window.location.hostname);
 
+
     let $users = $('.users');
 
     this.socket.on('init', clients => {

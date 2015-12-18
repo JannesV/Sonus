@@ -6,6 +6,11 @@ module.exports.register = (server, options, next) => {
   let Client = require('../models/Client');
   let io = require('socket.io')(server.listener);
 
+  io.configure(function () {
+    io.set("transports", ["xhr-polling"]);
+    io.set("polling duration", 10);
+  });
+
   io.on('connection', socket => {
 
     console.log('CONNECT')
