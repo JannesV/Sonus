@@ -9,7 +9,6 @@ window.AudioContext = window.AudioContext || window.webkitAudioContext;
 let context = new AudioContext();
 
 let socket;
-
 let sounds = ['syntklocka_stab', 'kick', 'clap', 'drums', 'hat', 'woody', 'bit_stab', 'bassdist'];
 
 let bufferList = {};
@@ -31,6 +30,7 @@ const loadSounds = () => {
 };
 
 const loadComplete = () => {
+  socket = io.connect('http://localhost:3000');
   window.sonus = new Sonus(sounds, bufferList, socket);
   setTimeout(() => {
     document.getElementById('loader').classList.add('slideOutDown', 'animated');
@@ -41,7 +41,8 @@ const loadComplete = () => {
 
 window.onload = () => {
 
-  socket = io(`http://localhost:${process.env.PORT || 3000}`);
+
+
 
   loadSounds();
 };

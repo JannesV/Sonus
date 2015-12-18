@@ -132,6 +132,33 @@ body {
 
   }
 
+  &.userspanel {
+    width: 250px;
+  }
+
+  .users {
+    padding: 10px;
+    li {
+      list-style: none;
+      font-size: 1.8em;
+      color: #666;
+      display: block;
+      height: 30px;
+      text-transform: capitalize;
+      .button {
+        box-shadow: none;
+        width: 80px;
+        height: 22px;
+        float: right;
+        margin: 0;
+        font-size: 0.7em;
+        text-align: center;
+        padding-top: 3px;
+        color: green;
+      }
+    }
+  }
+
   h1 {
     font-weight: 100;
     color: #666;

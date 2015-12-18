@@ -1,5 +1,6 @@
 'use strict';
 
+import userTpl from '../_hbs/user';
 import {ParticleGenerator} from './objects/Particle';
 import {SoundParticleGenerator} from './objects/SoundParticle';
 import {
@@ -11,9 +12,10 @@ from './helpers/util';
 
 
 class Sonus {
-  constructor(sounds, bufferList) {
+  constructor(sounds, bufferList, socket) {
     this.sounds = sounds;
     this.context = new AudioContext();
+    this.socket = socket;
     this.bufferList = bufferList;
     this.numParticles = 25;
     this.drawingMode = 'pencil';
@@ -26,9 +28,10 @@ class Sonus {
     this.drawing = false;
     this.activeSound = 0;
 
+    this.setupSocket();
     this.filterSetup();
     this.setupSketch();
-    this.setupSocket();
+
     document.getElementById('buttons').addEventListener('click', evt => this.buttonListener(evt));
     document.getElementById('eq').addEventListener('click', evt => this.eqListener(evt));
     document.getElementById('pencil').addEventListener('click', evt => this.pencilListener(evt));
@@ -39,43 +42,43 @@ class Sonus {
   }
 
   setupSocket() {
-    this.socket = io(window.location.hostname);
-
 
     let $users = $('.users');
 
     this.socket.on('init', clients => {
-      console.log('INIT');
+
 
       clients.forEach(client => {
-        console.log(client);
-        let $user = html('<li>derp</li>');
 
-        if (client.socketid === this.socket.id) {
-          console.log(client.socketid);
-        }
+        let $user = html(userTpl(client));
 
-        if (client.socketid === this.socket.id) {
-          $user.querySelector('input').addEventListener('input', e => {
-            this.socket.emit('nickname_change', {
-              nickname: e.currentTarget.value,
-              socketid: this.socket.id
-            });
+
+        $user.querySelector('.button').addEventListener('click', e => {
+          e.preventDefault();
+          this.socket.emit('yo', {
+            mySocketid: this.socket.id,
+            targetSocketid: e.currentTarget.parentNode.dataset.socketid
           });
-        } else {
-          $user.querySelector('a').addEventListener('click', e => {
-            e.preventDefault();
-            this.socket.emit('yo', {
-              mySocketid: this.socket.id,
-              targetSocketid: e.currentTarget.parentNode.dataset.socketid
-            });
 
-          });
-        }
+        });
+
         $users.appendChild($user);
 
       });
 
+    });
+
+    this.socket.on('user_joined', client => {
+      let $el = html(userTpl(client));
+
+
+
+      $users.appendChild($el);
+    });
+
+    this.socket.on('user_disconnect', socketid => {
+      let $el = $('[data-socketid="'+socketid+'"]');
+      $el.parentNode.removeChild($el);
     });
   }
 

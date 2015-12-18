@@ -19,6 +19,8 @@
     "eslint": "^1.7.1",
     "eslint-loader": "^1.0.0",
     "extract-text-webpack-plugin": "^0.8.2",
+    "handlebars": "^4.0.5",
+    "handlebars-loader": "^1.1.4",
     "image-webpack-loader": "^1.6.2",
     "node-sass": "^3.3.3",
     "postcss-cssnext": "^2.1.0",

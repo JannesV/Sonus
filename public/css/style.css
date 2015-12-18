@@ -3228,6 +3228,35 @@ body {
   padding: 0;
 }
 
+.panel.userspanel {
+  width: 250px;
+}
+
+.panel .users {
+  padding: 10px;
+}
+
+.panel .users li {
+  list-style: none;
+  font-size: 1.8em;
+  color: #666;
+  display: block;
+  height: 30px;
+  text-transform: capitalize;
+}
+
+.panel .users li .button {
+  box-shadow: none;
+  width: 80px;
+  height: 22px;
+  float: right;
+  margin: 0;
+  font-size: 0.7em;
+  text-align: center;
+  padding-top: 3px;
+  color: green;
+}
+
 .panel h1 {
   font-weight: 100;
   color: #666;

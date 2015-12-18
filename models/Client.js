@@ -1,10 +1,10 @@
 'use strict';
 
 class Client {
-    constructor(id, socketid) {
+    constructor(id, nickname, socketid) {
       this.id = id;
       this.socketid = socketid;
-      this.nickname = `user ${this.socketid}`;
+      this.nickname = nickname;
       this.button = true;
     }
 }
