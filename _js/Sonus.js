@@ -31,11 +31,16 @@ class Sonus {
 
     document.getElementById('buttons').addEventListener('click', evt => this.buttonListener(evt));
     document.getElementById('eq').addEventListener('click', evt => this.eqListener(evt));
+    document.getElementById('info').addEventListener('click', evt => this.infoListener(evt));
     document.getElementById('pencil').addEventListener('click', evt => this.pencilListener(evt));
     document.getElementById('eraser').addEventListener('click', evt => this.eraserListener(evt));
     document.getElementById('trash').addEventListener('click', evt => this.trashListener(evt));
     document.getElementById('gain').addEventListener('input', evt => this.gainListener(evt));
     document.getElementById('delay').addEventListener('input', evt => this.delayListener(evt));
+    document.getElementById('phaser').addEventListener('input', evt => this.phaserListener(evt));
+    document.getElementById('overdrive').addEventListener('input', evt => this.overdriveListener(evt));
+    document.getElementById('compressor').addEventListener('input', evt => this.compressorListener(evt));
+    document.getElementById('tremelo').addEventListener('input', evt => this.tremeloListener(evt));
   }
 
   playRequest(e) {
@@ -121,12 +126,12 @@ class Sonus {
     for(var key in this.filters) {
       this.filters[key].gain = this.context.createGain();
       this.filters[key].phaser = new tuna.Phaser({
-        rate: 3,                     //0.01 to 8 is a decent range, but higher values are possible
+        rate: 5,                     //0.01 to 8 is a decent range, but higher values are possible
         depth: 0.3,                    //0 to 1
         feedback: 0.2,                 //0 to 1+
         stereoPhase: 30,               //0 to 180
         baseModulationFrequency: 700,  //500 to 1500
-        bypass: 0
+        bypass: 1
       });
       this.filters[key].delay = new tuna.Delay({
         feedback: 0.45,    //0 to 1+
@@ -136,6 +141,29 @@ class Sonus {
         cutoff: 2000,      //cutoff frequency of the built in lowpass-filter. 20 to 22050
         bypass: 0
       });
+      this.filters[key].overdrive = new tuna.Overdrive({
+        outputGain: 0.2,         //0 to 1+
+        drive: 0.1,              //0 to 1
+        curveAmount: 0.3,          //0 to 1
+        algorithmIndex: 0,       //0 to 5, selects one of our drive algorithms
+        bypass: 1
+      });
+      this.filters[key].compressor = new tuna.Compressor({
+        threshold: 0.5,    //-100 to 0
+        makeupGain: 1,     //0 and up
+        attack: 1,         //0 to 1000
+        release: 0,        //0 to 3000
+        ratio: 4,          //1 to 20
+        knee: 5,           //0 to 40
+        automakeup: true,  //true/false
+        bypass: 1
+      });
+      this.filters[key].tremolo = new tuna.Tremolo({
+        intensity: 1,    //0 to 1
+        rate: 5,         //0.001 to 8
+        stereoPhase: 0,    //0 to 180
+        bypass: 1
+      });
     }
   }
 
@@ -143,10 +171,16 @@ class Sonus {
     document.getElementById('eqpanel').classList.toggle('closed');
   }
 
+  infoListener() {
+    document.getElementById('infopanel').classList.toggle('closed');
+  }
   trashListener() {
-    this.soundParticles[this.activeSound].forEach(particle => {
-      particle.alpha = 0;
+    this.soundParticles.forEach(particles => {
+      particles.forEach(particle => {
+        particle.alpha = 0;
+      });
     });
+
   }
 
   pencilListener() {
@@ -163,6 +197,22 @@ class Sonus {
 
   gainListener(evt) {
     this.filters[this.sounds[this.activeSound]].gain.gain.value = evt.target.value;
+  }
+
+  phaserListener(evt) {
+    this.filters[this.sounds[this.activeSound]].phaser.bypass = (parseInt(evt.target.value) === 1 ? false : true);
+  }
+
+  overdriveListener(evt) {
+    this.filters[this.sounds[this.activeSound]].overdrive.bypass = (parseInt(evt.target.value) === 1 ? false : true);
+  }
+
+  compressorListener(evt) {
+    this.filters[this.sounds[this.activeSound]].compressor.bypass = (parseInt(evt.target.value) === 1 ? false : true);
+  }
+
+  tremeloListener(evt) {
+    this.filters[this.sounds[this.activeSound]].tremolo.bypass = (parseInt(evt.target.value) === 1 ? false : true);
   }
 
   delayListener(evt) {
@@ -195,7 +245,10 @@ class Sonus {
 
     source.connect(filters.delay);
     filters.delay.connect(filters.phaser);
-    filters.phaser.connect(filters.gain);
+    filters.phaser.connect(filters.overdrive);
+    filters.overdrive.connect(filters.compressor);
+    filters.compressor.connect(filters.tremolo);
+    filters.tremolo.connect(filters.gain);
     filters.gain.connect(this.context.destination);
 
     if (!source.start) {

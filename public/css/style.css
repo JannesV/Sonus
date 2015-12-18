@@ -3190,6 +3190,16 @@ body {
   position: relative;
 }
 
+.panel p {
+  padding: 10px;
+  font-size: 1.2em;
+  line-height: 160%;
+}
+
+.panel p strong {
+  font-weight: 600;
+}
+
 .panel .buttons {
   position: absolute;
   top: 5px;
@@ -3213,10 +3223,15 @@ body {
   height: 125px;
 }
 
+.panel#infopanel {
+  height: 150px;
+}
+
 .panel.closed {
   height: 0px !important;
   padding-top: 0;
   padding-bottom: 0;
+  margin-bottom: 0;
 }
 
 .panel #canvas {
@@ -3233,7 +3248,7 @@ body {
 }
 
 .panel .users {
-  padding: 10px;
+  padding: 10px 10px 0 10px;
   max-height: 200px;
   overflow-y: auto;
 }
@@ -3331,10 +3346,18 @@ body {
   border: 1px solid #DDD;
   border-radius: 5px;
   padding: 5px;
-  width: 47.4%;
+  width: 280px;
   float: left;
   margin: 10px;
   box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+.panel .slider.small {
+  width: 135px;
+}
+
+.panel .slider.small input {
+  width: 55px;
 }
 
 .panel .slider:nth-of-type(even) {
@@ -3343,7 +3366,7 @@ body {
 }
 
 .panel .slider label {
-  width: 22%;
+  width: 60px;
   text-transform: uppercase;
   font-size: 1.5em;
   color: #999;
@@ -3355,9 +3378,9 @@ body {
 .panel input[type=range] {
   -webkit-appearance: none;
   height: 16px;
+  width: 200px;
   background: none;
   padding-top: 4px;
-  width: 75%;
 }
 
 .panel input[type=range]::-webkit-slider-runnable-track {
