@@ -227,7 +227,7 @@ class Sonus {
       document.getElementById('delay').value = this.filters[this.sounds[this.activeSound]].delay.wetLevel.value;
 
 
-      let buttons = document.getElementsByClassName('button');
+      let buttons = document.getElementById('buttons').getElementsByClassName('button');
       [].forEach.call(buttons, (button) => {
         button.classList.remove('active');
       });
