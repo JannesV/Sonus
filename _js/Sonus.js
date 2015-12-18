@@ -51,7 +51,7 @@ class Sonus {
         let $user = html('<li>derp</li>');
 
         if (client.socketid === this.socket.id) {
-          this.client.button = false;
+          console.log(client.socketid);
         }
 
         if (client.socketid === this.socket.id) {
