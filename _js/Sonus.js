@@ -7,9 +7,6 @@ import {
     html, $
 }
 from './helpers/util';
-//import Recorder from './objects/Recorder';
-
-
 
 class Sonus {
   constructor(sounds, bufferList, socket) {
@@ -41,44 +38,78 @@ class Sonus {
     document.getElementById('delay').addEventListener('input', evt => this.delayListener(evt));
   }
 
+  playRequest(e) {
+    e.preventDefault();
+
+    let targetId = e.currentTarget.parentNode.dataset.socketid;
+    console.log(targetId);
+
+    this.socket.emit('watch', {
+      mySocketid: this.socket.id,
+      targetSocketid: targetId
+    });
+
+  }
+
   setupSocket() {
 
     let $users = $('.users');
+    $users.innerHTML = '';
 
     this.socket.on('init', clients => {
-
-
       clients.forEach(client => {
+
+        if (client.socketid === this.socket.id) {
+          client.self = true;
+        }
 
         let $user = html(userTpl(client));
 
-
-        $user.querySelector('.button').addEventListener('click', e => {
-          e.preventDefault();
-          this.socket.emit('yo', {
-            mySocketid: this.socket.id,
-            targetSocketid: e.currentTarget.parentNode.dataset.socketid
+        if (client.socketid !== this.socket.id) {
+          $user.querySelector('.button').addEventListener('click', e => {
+            this.playRequest(e);
           });
-
-        });
+        }
 
         $users.appendChild($user);
-
       });
-
     });
+
 
     this.socket.on('user_joined', client => {
       let $el = html(userTpl(client));
 
-
+      $el.querySelector('.button').addEventListener('click', e => {
+        this.playRequest(e);
+      });
 
       $users.appendChild($el);
     });
 
+    this.socket.on('view', socketId => {
+       this.socket.emit('draw', this.makePackage(socketId));
+    });
+
+    this.socket.on('draw_update', data => {
+      console.log(data);
+      for (var i = this.soundParticles.length - 1; i >= 0; i--) {
+        for (var y = this.soundParticles[i].length - 1; y >= 0; y--) {
+          this.soundParticles[i][y].x = data[i][y].x;
+          this.soundParticles[i][y].y = data[i][y].y;
+          this.soundParticles[i][y].alpha = data[i][y].alpha;
+        };
+      };
+    });
+
     this.socket.on('user_disconnect', socketid => {
-      let $el = $('[data-socketid="'+socketid+'"]');
+      let $el = $(`[data-socketid="${socketid}"]`);
       $el.parentNode.removeChild($el);
+    });
+
+    this.socket.on('watching', socketid => {
+      console.log(socketid);
+      let $el = $(`[data-socketid="${socketid}"]`);
+      $el.querySelector('.button').classList.add('disabled');
     });
   }
 
@@ -184,12 +215,11 @@ class Sonus {
               particle.draw(this.draw);
 
               if(Math.abs(particle.x - this.draw.mouse.x) <= 3 && this.drawing && this.activeSound === i) {
-                console.log(this.drawingMode);
                 if (this.drawingMode === 'pencil') {
                   particle.y = this.draw.mouse.y;
                   particle.energy = 1;
                   particle.makeVisible();
-                } else {
+                } else if (this.drawingMode == 'eraser') {
                   particle.alpha = 0;
                 }
 
@@ -238,6 +268,21 @@ class Sonus {
     }
 
 
+  }
+
+  makePackage(socketid) {
+    let data = {socketid: socketid, particles: []};
+    this.soundParticles.forEach(particles => {
+      let arr = [];
+      particles.forEach(particle => {
+        let part = {x: particle.x, y: particle.y, alpha: particle.alpha};
+        arr.push(part);
+      });
+      data.particles.push(arr);
+    });
+
+    //NOT IDEAL SENDING 11KB every mouseup. #LackOfTime
+   return data;
   }
 
   pop(particles) {

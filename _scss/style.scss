@@ -138,23 +138,35 @@ body {
 
   .users {
     padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
     li {
       list-style: none;
-      font-size: 1.8em;
+      font-size: 1.6em;
       color: #666;
       display: block;
       height: 30px;
       text-transform: capitalize;
       .button {
         box-shadow: none;
-        width: 80px;
-        height: 22px;
+        width: 25px;
+        height: 25px;
         float: right;
         margin: 0;
         font-size: 0.7em;
         text-align: center;
         padding-top: 3px;
         color: green;
+
+        img {
+          height: 18px;
+          margin: 0px auto;
+        }
+
+        &.disabled {
+          color: #666;
+
+        }
       }
     }
   }
@@ -192,13 +204,21 @@ body {
       display: block;
       pointer-events: none;
     }
+
+    &.disabled {
+      opacity: 0.5;
+      pointer: default;
+      &:hover {
+        border: 1px solid #DDD;
+        cursor: default;
+      }
+    }
     &:hover {
-      border: 1px solid #000;
+      border: 1px solid #999;
       cursor: pointer;
     }
     &.active {
       border: 1px solid #F38630;
-
     }
     &.active:hover {
       background-color: rgba(255,255,255,0.7);

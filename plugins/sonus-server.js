@@ -7,7 +7,6 @@ module.exports.register = (server, options, next) => {
 
   let io = server.plugins['hapi-io'].io;
 
-
   io.on('connection', socket => {
 
     let maxId = 0;
@@ -24,7 +23,6 @@ module.exports.register = (server, options, next) => {
     let client = new Client(maxId + 1, usernames[Math.floor(Math.random() * usernames.length)], socket.id);
     clients.push(client);
 
-
     socket.emit('init', clients);
 
     socket.on('disconnect', () => {
@@ -33,10 +31,14 @@ module.exports.register = (server, options, next) => {
       socket.broadcast.emit('user_disconnect', socket.id);
     });
 
-    socket.on('nickname_change', data => {
-      socket.broadcast.emit('nickname_update', data);
+    socket.on('watch', (data) => {
+      io.sockets.connected[data.targetSocketid].emit('view', data.mySocketid);
     });
 
+    socket.on('draw', data => {
+      console.log(data);
+      io.sockets.connected[data.socketid].emit('draw_update', data.particles);
+    });
 
     socket.broadcast.emit('user_joined', client);
 

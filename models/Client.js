@@ -5,7 +5,6 @@ class Client {
       this.id = id;
       this.socketid = socketid;
       this.nickname = nickname;
-      this.button = true;
     }
 }
 
